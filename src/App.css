@@ -1,0 +1,150 @@
+/* Google Fonts bağlantısını ekleyin */
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/* Genel body stilini burada ayarlıyoruz */
+body {
+  background: #0f0c29;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #24243e, #302b63, #0f0c29); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  color: rgb(255, 255, 255);
+  font-family: 'Roboto', sans-serif; /* Roboto fontunu burada uyguladık */
+}
+
+/* Kutular için fontu ayarlıyoruz */
+.box, .box2, .box3, .box4, .box5, .circle {
+  font-family: 'Roboto', serif;  /* Tüm kutularda Roboto fontu kullanılacak */
+}
+
+/* Box stilini tanımlıyoruz */
+.box {
+  margin-top: 1px;  /* Kutunun altına biraz boşluk bırak */
+  width: 1400px;    /* Kutu genişliği */
+  height: 85px;     /* Kutu yüksekliği */
+  background: #1F1C2C;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #928DAB, #1F1C2C);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #928DAB, #1F1C2C); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  border-radius: 15px; /* Kenarları yumuşat */
+  display: flex;
+  justify-content: center; /* İçeriği yatayda ortala */
+  align-items: center;     /* İçeriği dikeyde ortala */
+  color: white;            /* Yazı rengi */
+  font-size: 20px;         /* Kutudaki yazının boyutu */
+}
+
+/* Box2 stilini tanımlıyoruz */
+.box2 {
+  width: 150px;    /* Kutu genişliği */
+  height: 700px;   /* Kutu yüksekliği */
+  background-color: #928DAB;  /* Kutunun içi beyaz */
+  border: 2px solid black;  /* Kutunun kenarlarını siyah yap */
+  border-radius: 15px; /* Kenarları yumuşat */
+  display: flex;
+  justify-content: center; /* Yatayda ortala */
+  align-items: flex-start; /* Dikeyde üstte hizala */
+  color: black;            /* Yazı rengi siyah */
+  font-size: 20px;         /* Kutudaki yazının boyutu */
+
+  position: absolute; /* Mutlak konumlandırma */
+  left: 100px;   /* Kutuyu soldan 500px kaydırır */
+  top: 165px;     /* Kutuyu üstten 165px kaydırır */
+}
+
+/* Box3 stilini tanımlıyoruz */
+.box3 {
+  width: 900px;    /* Kutu genişliği */
+  height: 150px;   /* Kutu yüksekliği */
+  background-color: #928DAB;  /* Kutunun içi beyaz */
+  border: 2px solid black;  /* Kutunun kenarlarını siyah yap */
+  border-radius: 15px; /* Kenarları yumuşat */
+  display: flex;
+  justify-content: center; /* Yatayda ortala */
+  align-items: flex-start; /* Dikeyde üstte hizala */
+  color: black;            /* Yazı rengi siyah */
+  font-size: 20px;         /* Kutudaki yazının boyutu */
+
+  position: absolute; /* Mutlak konumlandırma */
+  left: 500px;   /* Kutuyu soldan 500px kaydırır */
+  top: 165px;     /* Kutuyu üstten 165px kaydırır */
+}
+
+/* Box4 stilini tanımlıyoruz */
+.box4 {
+  width: 900px;    /* Kutu genişliği */
+  height: 300px;   /* Kutu yüksekliği */
+  background-color: #928DAB;  /* Kutunun içi beyaz */
+  border: 2px solid black;  /* Kutunun kenarlarını siyah yap */
+  border-radius: 15px; /* Kenarları yumuşat */
+  display: flex;
+  justify-content: center; /* Yatayda ortala */
+  align-items: flex-start; /* Dikeyde üstte hizala */
+  color: black;            /* Yazı rengi siyah */
+  font-size: 20px;         /* Kutudaki yazının boyutu */
+
+  position: absolute; /* Mutlak konumlandırma */
+  left: 500px;   /* Kutuyu soldan 500px kaydırır */
+  top: 500px;     /* Kutuyu üstten 500px kaydırır */
+}
+
+/* Box5 stilini tanımlıyoruz */
+.box5 {
+  width: 250px;    /* Kutu genişliği */
+  height: 250px;   /* Kutu yüksekliği */
+  background-color: #928DAB;  /* Kutunun içi beyaz */
+  border: 2px solid black;  /* Kutunun kenarlarını siyah yap */
+  border-radius: 15px; /* Kenarları yumuşat */
+  display: flex;
+  justify-content: center; /* Yatayda ortala */
+  align-items: flex-start; /* Dikeyde üstte hizala */
+  color: black;            /* Yazı rengi siyah */
+  font-size: 20px;         /* Kutudaki yazının boyutu */
+
+  position: absolute; /* Mutlak konumlandırma */
+  left: 1600px;   /* Kutuyu soldan 500px kaydırır */
+  top: 675px;     /* Kutuyu üstten 675px kaydırır */
+}
+
+/* Circle stilini tanımlıyoruz */
+.circle {
+  width: 50px;      /* Dairenin genişliği */
+  height: 50px;     /* Dairenin yüksekliği */
+  background-color: white;  /* Dairenin içi beyaz */
+  border: 2px solid black;  /* Dairenin kenarlarını siyah yap */
+  border-radius: 50%; /* Kenarları tamamen yuvarlak yap */
+  display: flex;
+  justify-content: center; /* Yatayda ortala */
+  align-items: center;     /* Dikeyde ortala */
+  color: black;            /* Yazı rengi siyah */
+  font-size: 20px;         /* Dairenin içindeki yazının boyutu */
+
+  position: absolute; /* Mutlak konumlandırma */
+  left: 1795px;   /* Kutuyu soldan 500px kaydırır */
+  top: 20px;     /* Kutuyu üstten 20px kaydırır */
+}
+
+/* App.css dosyanızda */
+.button1 {
+  border: none; /* Kenarlık yok */
+  background-color: #928DAB;  /* Kutunun içi beyaz */
+  border: 2px solid black;  /* Kutunun kenarlarını siyah yap */
+  padding: 15px 32px; /* İçerik için boşluk */
+  text-align: center; /* Yazıyı ortala */
+  text-decoration: none; /* Alt çizgi yok */
+  display: inline-block; /* Buton hizası */
+  font-size: 16px; /* Yazı boyutu */
+  margin: 4px 2px; /* Butonun etrafında boşluk */
+  cursor: pointer; /* Fare imlecini buton olduğunu gösterir */
+  border-radius: 8px; /* Kenarları yuvarlat */
+  transition: background-color 0.3s; /* Arka plan renginin geçişi */
+  position: absolute; /* Mutlak konumlandırma */
+  left: 115px;   /* Kutuyu soldan 500px kaydırır */
+  top: 780px;     /* Kutuyu üstten 20px kaydırır */
+}
+
+.button1:hover {
+  background-color: #ffffff; /* Hover (fareyle üzerine gelindiğinde) rengi değişir */
+}
