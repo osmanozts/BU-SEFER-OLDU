@@ -1,19 +1,19 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import { Bell, MessageCircle, Home, Users, Crown, User, X, Mail, Lock, ChevronDown, Shield } from 'lucide-react';
+import { ChevronDown, Crown, Home, Lock, Mail, Shield, User, Users, X } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import ChatSidebar from './components/ChatSidebar';
+import PageTransition from './components/PageTransition';
+import ThemeSwitcher from './components/ThemeSwitcher';
 import { supabase } from './lib/supabase';
-import HomePage from './pages/HomePage';
+import { Theme, themes } from './lib/themes';
+import AdminPanel from './pages/AdminPanel';
 import CategoryPage from './pages/CategoryPage';
+import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import TopicPage from './pages/TopicPage';
 import UsersPage from './pages/UsersPage';
 import VIPPage from './pages/VIPPage';
-import AdminPanel from './pages/AdminPanel';
-import ChatSidebar from './components/ChatSidebar';
-import ThemeSwitcher from './components/ThemeSwitcher';
-import { themes, Theme } from './lib/themes';
-import PageTransition from './components/PageTransition';
 
 const categories = [
   'Teknoloji',
@@ -61,11 +61,14 @@ function App() {
           `)
           .eq('user_id', user.id);
 
-        const highestRole = userRoles?.reduce((prev, curr) => {
-          return (curr.role.level > prev.role.level) ? curr : prev;
-        }, userRoles?.[0]);
+        const highestRole = userRoles
+          ?.map(user =>
+            user.role.reduce((prev, curr) => (curr.level > prev.level ? curr : prev), user.role[0])
+          )
+          .reduce((prev, curr) => (curr.level > prev.level ? curr : prev), userRoles?.[0]?.role?.[0]);
 
-        setUserRoleLevel(highestRole?.role.level || 0);
+        setUserRoleLevel(highestRole?.level || 0);
+
       }
     };
 
@@ -86,11 +89,25 @@ function App() {
           `)
           .eq('user_id', currentUser.id);
 
-        const highestRole = userRoles?.reduce((prev, curr) => {
-          return (curr.role.level > prev.role.level) ? curr : prev;
-        }, userRoles?.[0]);
 
-        setIsStaff(highestRole?.role.level >= 7);
+        if (!userRoles || userRoles.length === 0) {
+          setIsStaff(false);
+          return;
+        }
+
+
+        const highestRolesPerUser = userRoles.map(user =>
+          Array.isArray(user.role) && user.role.length > 0
+            ? user.role.reduce((prev, curr) => (curr.level > prev.level ? curr : prev), user.role[0])
+            : { level: 0 }
+        );
+
+
+        const highestRole = highestRolesPerUser.reduce((prev, curr) =>
+          curr.level > prev.level ? curr : prev, { level: 0 }
+        );
+
+        setIsStaff(highestRole.level >= 7);
       } else {
         setIsStaff(false);
       }
@@ -98,6 +115,7 @@ function App() {
 
     checkStaffRole();
   }, [currentUser]);
+
 
   useEffect(() => {
     const savedThemeId = localStorage.getItem('theme');
@@ -256,7 +274,7 @@ function App() {
   const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    
+
     if (newTitle.length > TITLE_MAX_LENGTH) {
       setFormError(`Başlık en fazla ${TITLE_MAX_LENGTH} karakter olabilir`);
     } else {
@@ -267,7 +285,7 @@ function App() {
   const handleContentChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
     setContent(newContent);
-    
+
     if (newContent.length > CONTENT_MAX_LENGTH) {
       setFormError(`İçerik en fazla ${CONTENT_MAX_LENGTH} karakter olabilir`);
     } else {
@@ -280,8 +298,8 @@ function App() {
       <header className={`${currentTheme.headerBg} backdrop-blur-sm border-b border-white/10 p-4 relative z-40`}>
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 w-full sm:w-auto">
-            <h1 
-              onClick={() => navigate('/')} 
+            <h1
+              onClick={() => navigate('/')}
               className="text-2xl font-bold text-white cursor-pointer hover:text-purple-400 transition-colors"
             >
               Forum
@@ -305,7 +323,7 @@ function App() {
             <ThemeSwitcher currentTheme={currentTheme} onThemeChange={handleThemeChange} />
             {currentUser ? (
               <div className="relative group">
-                <button 
+                <button
                   onClick={() => navigate(`/profil/${currentUser.user_metadata.username}`)}
                   className="p-2 hover:bg-white/10 rounded-full transition-colors"
                 >
@@ -329,7 +347,7 @@ function App() {
                 </div>
               </div>
             ) : (
-              <button 
+              <button
                 onClick={() => setShowAuthModal(true)}
                 className="p-2 hover:bg-white/10 rounded-full transition-colors"
               >
@@ -343,7 +361,7 @@ function App() {
       <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-64 lg:flex-shrink-0 order-2 lg:order-1">
           <nav className="flex lg:flex-col gap-2">
-            <button 
+            <button
               onClick={() => navigate('/')}
               className={`flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 ${currentTheme.cardBg} rounded-lg text-white ${currentTheme.hoverBg} transition-colors`}
             >
@@ -351,19 +369,18 @@ function App() {
               <span>Ana Sayfa</span>
             </button>
             <div className="relative flex-1 lg:flex-none">
-              <button 
+              <button
                 className={`w-full flex items-center gap-3 px-4 py-3 ${currentTheme.cardBg} rounded-lg text-white ${currentTheme.hoverBg} transition-colors ${showCategories ? 'bg-white/20' : ''}`}
                 onClick={() => setShowCategories(!showCategories)}
               >
                 <Users className="w-5 h-5" />
                 <span>Kategoriler</span>
               </button>
-              <div 
-                className={`absolute left-0 w-full mt-2 py-2 ${currentTheme.cardBg} backdrop-blur-sm border border-white/10 rounded-lg shadow-xl transform transition-all duration-200 ease-in-out origin-top z-50 ${
-                  showCategories 
-                    ? 'opacity-100 scale-y-100 translate-y-0' 
-                    : 'opacity-0 scale-y-0 -translate-y-2 pointer-events-none'
-                }`}
+              <div
+                className={`absolute left-0 w-full mt-2 py-2 ${currentTheme.cardBg} backdrop-blur-sm border border-white/10 rounded-lg shadow-xl transform transition-all duration-200 ease-in-out origin-top z-50 ${showCategories
+                  ? 'opacity-100 scale-y-100 translate-y-0'
+                  : 'opacity-0 scale-y-0 -translate-y-2 pointer-events-none'
+                  }`}
               >
                 {categories.map((category, index) => (
                   <button
@@ -379,14 +396,14 @@ function App() {
                 ))}
               </div>
             </div>
-            <button 
+            <button
               onClick={() => navigate('/kullanicilar')}
               className={`flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 ${currentTheme.cardBg} rounded-lg text-white ${currentTheme.hoverBg} transition-colors`}
             >
               <Users className="w-5 h-5" />
               <span>Kullanıcılar</span>
             </button>
-            <button 
+            <button
               onClick={() => navigate('/vip')}
               className={`flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 ${currentTheme.cardBg} rounded-lg text-white ${currentTheme.hoverBg} transition-colors`}
             >
@@ -394,7 +411,7 @@ function App() {
               <span>VIP Bölüm</span>
             </button>
             {isStaff && (
-              <button 
+              <button
                 onClick={() => navigate('/panel')}
                 className={`flex-1 lg:flex-none flex items-center gap-3 px-4 py-3 ${currentTheme.cardBg} rounded-lg text-white ${currentTheme.hoverBg} transition-colors`}
               >
@@ -455,17 +472,17 @@ function App() {
       {showAuthModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-8 w-full max-w-md relative">
-            <button 
+            <button
               onClick={() => setShowAuthModal(false)}
               className="absolute right-4 top-4 text-white/60 hover:text-white"
             >
               <X className="w-5 h-5" />
             </button>
-            
+
             <h2 className="text-2xl font-bold text-white mb-6">
               {isLogin ? 'Giriş Yap' : 'Kayıt Ol'}
             </h2>
-            
+
             <form onSubmit={handleAuth} className="space-y-4">
               {!isLogin && (
                 <div>
@@ -500,7 +517,7 @@ function App() {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-white/80 mb-2" htmlFor="password">
                   Şifre
@@ -522,7 +539,7 @@ function App() {
                   {formError}
                 </div>
               )}
-              
+
               <button
                 type="submit"
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-2 transition-colors"
@@ -530,7 +547,7 @@ function App() {
                 {isLogin ? 'Giriş Yap' : 'Kayıt Ol'}
               </button>
             </form>
-            
+
             <div className="mt-4 text-center">
               <button
                 onClick={() => {
@@ -549,7 +566,7 @@ function App() {
       {showNewTopicModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-8 w-full max-w-2xl relative">
-            <button 
+            <button
               onClick={() => {
                 setShowNewTopicModal(false);
                 setTitle('');
@@ -561,9 +578,9 @@ function App() {
             >
               <X className="w-5 h-5" />
             </button>
-            
+
             <h2 className="text-2xl font-bold text-white mb-6">Yeni Konu Oluştur</h2>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-white/80 mb-2">
@@ -576,11 +593,10 @@ function App() {
                   type="text"
                   value={title}
                   onChange={handleTitleChange}
-                  className={`w-full bg-white/5 border rounded-lg py-2 px-4 text-white placeholder-white/40 focus:outline-none transition-colors ${
-                    title.length > TITLE_MAX_LENGTH 
-                      ? 'border-red-500 focus:border-red-600' 
-                      : 'border-white/10 focus:border-purple-500'
-                  }`}
+                  className={`w-full bg-white/5 border rounded-lg py-2 px-4 text-white placeholder-white/40 focus:outline-none transition-colors ${title.length > TITLE_MAX_LENGTH
+                    ? 'border-red-500 focus:border-red-600'
+                    : 'border-white/10 focus:border-purple-500'
+                    }`}
                   placeholder="Konu başlığı"
                 />
               </div>
@@ -597,7 +613,7 @@ function App() {
                   </span>
                   <ChevronDown className={`w-5 h-5 text-white/40 transition-transform ${showCategoryDropdown ? 'rotate-180' : ''}`} />
                 </button>
-                
+
                 {showCategoryDropdown && (
                   <div className="absolute z-10 w-full mt-1 bg-slate-800 border border-white/10 rounded-lg shadow-lg">
                     {categories.map((category) => (
@@ -616,7 +632,7 @@ function App() {
                   </div>
                 )}
               </div>
-              
+
               <div>
                 <label className="block text-white/80 mb-2">
                   İçerik
@@ -627,11 +643,10 @@ function App() {
                 <textarea
                   value={content}
                   onChange={handleContentChange}
-                  className={`w-full bg-white/5 border rounded-lg py-2 px-4 text-white placeholder-white/40 focus:outline-none transition-colors min-h-[200px] resize-y ${
-                    content.length > CONTENT_MAX_LENGTH 
-                      ? 'border-red-500 focus:border-red-600' 
-                      : 'border-white/10 focus:border-purple-500'
-                  }`}
+                  className={`w-full bg-white/5 border rounded-lg py-2 px-4 text-white placeholder-white/40 focus:outline-none transition-colors min-h-[200px] resize-y ${content.length > CONTENT_MAX_LENGTH
+                    ? 'border-red-500 focus:border-red-600'
+                    : 'border-white/10 focus:border-purple-500'
+                    }`}
                   placeholder="Konu içeriği..."
                 />
               </div>
@@ -641,7 +656,7 @@ function App() {
                   {formError}
                 </div>
               )}
-              
+
               <div className="flex justify-end gap-3">
                 <button
                   onClick={() => {

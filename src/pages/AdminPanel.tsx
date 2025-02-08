@@ -59,7 +59,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
   const [availableRoles, setAvailableRoles] = useState<Role[]>([]);
   const [selectedRole, setSelectedRole] = useState('');
   const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
-  const [currentUserLevel, setCurrentUserLevel] = useState(0);
+  // const [currentUserLevel, setCurrentUserLevel] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +82,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
             return (curr.role.level > prev.role.level) ? curr : prev;
           }, userRoles?.[0]);
 
-          setCurrentUserLevel(highestRole?.role.level || 0);
+          // setCurrentUserLevel(highestRole?.role.level || 0);
 
           // Fetch available roles based on user's level
           if (highestRole) {
@@ -91,7 +91,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
               .select('*')
               .lt('level', highestRole.role.level)
               .order('level', { ascending: false });
-            
+
             setAvailableRoles(roles || []);
           }
         }
@@ -337,11 +337,10 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
       <div className="flex gap-2">
         <button
           onClick={() => setShowTopicsTab(false)}
-          className={`px-4 py-2 rounded-lg transition-colors ${
-            !showTopicsTab 
-              ? `${theme.accentColor} text-white` 
-              : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
-          }`}
+          className={`px-4 py-2 rounded-lg transition-colors ${!showTopicsTab
+            ? `${theme.accentColor} text-white`
+            : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
+            }`}
         >
           <div className="flex items-center gap-2">
             <Shield className="w-5 h-5" />
@@ -350,11 +349,10 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
         </button>
         <button
           onClick={() => setShowTopicsTab(true)}
-          className={`px-4 py-2 rounded-lg transition-colors ${
-            showTopicsTab 
-              ? `${theme.accentColor} text-white` 
-              : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
-          }`}
+          className={`px-4 py-2 rounded-lg transition-colors ${showTopicsTab
+            ? `${theme.accentColor} text-white`
+            : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10'
+            }`}
         >
           <div className="flex items-center gap-2">
             <MessageSquare className="w-5 h-5" />
@@ -383,7 +381,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
           {showTopicsTab ? (
             // Topics List
             topics
-              .filter(topic => 
+              .filter(topic =>
                 topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 topic.author.username.toLowerCase().includes(searchQuery.toLowerCase())
               )
@@ -488,7 +486,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-6 w-full max-w-md">
             <h3 className="text-xl font-bold text-white mb-4">Kullanıcı Yasakla</h3>
-            
+
             <div className="space-y-4">
               <p className="text-white/80">
                 <span className="font-semibold">@{selectedUser.username}</span> kullanıcısını yasaklamak istediğinize emin misiniz?
@@ -499,55 +497,50 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setBanDuration('1h')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      banDuration === '1h'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${banDuration === '1h'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>1 Saat</span>
                   </button>
                   <button
                     onClick={() => setBanDuration('24h')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      banDuration === '24h'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${banDuration === '24h'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>24 Saat</span>
                   </button>
                   <button
                     onClick={() => setBanDuration('7d')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      banDuration === '7d'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${banDuration === '7d'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>7 Gün</span>
                   </button>
                   <button
                     onClick={() => setBanDuration('permanent')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      banDuration === 'permanent'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${banDuration === 'permanent'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>Süresiz</span>
                   </button>
                   <button
                     onClick={() => setBanDuration('custom')}
-                    className={`col-span-2 flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      banDuration === 'custom'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`col-span-2 flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${banDuration === 'custom'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>Özel Süre</span>
@@ -607,7 +600,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-6 w-full max-w-md">
             <h3 className="text-xl font-bold text-white mb-4">Kullanıcı Sustur</h3>
-            
+
             <div className="space-y-4">
               <p className="text-white/80">
                 <span className="font-semibold">@{selectedUser.username}</span> kullanıcısını susturmak istediğinize emin misiniz?
@@ -618,55 +611,50 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => setMuteDuration('1h')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      muteDuration === '1h'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${muteDuration === '1h'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>1 Saat</span>
                   </button>
                   <button
                     onClick={() => setMuteDuration('24h')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      muteDuration === '24h'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${muteDuration === '24h'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>24 Saat</span>
                   </button>
                   <button
                     onClick={() => setMuteDuration('7d')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      muteDuration === '7d'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${muteDuration === '7d'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>7 Gün</span>
                   </button>
                   <button
                     onClick={() => setMuteDuration('permanent')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      muteDuration === 'permanent'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${muteDuration === 'permanent'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>Süresiz</span>
                   </button>
                   <button
                     onClick={() => setMuteDuration('custom')}
-                    className={`col-span-2 flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                      muteDuration === 'custom'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-                    }`}
+                    className={`col-span-2 flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${muteDuration === 'custom'
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
+                      }`}
                   >
                     <Clock className="w-4 h-4" />
                     <span>Özel Süre</span>
@@ -726,12 +714,12 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-6 w-full max-w-md">
             <h3 className="text-xl font-bold text-white mb-4">Konuyu Sil</h3>
-            
+
             <div className="space-y-4">
               <p className="text-white/80">
                 <span className="font-semibold">{selectedTopic.title}</span> başlıklı konuyu silmek istediğinize emin misiniz?
               </p>
-              
+
               <p className="text-white/60 text-sm">
                 Bu işlem geri alınamaz ve konuya ait tüm yorumlar da silinecektir.
               </p>
@@ -757,7 +745,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
                   onClick={handleDeleteTopic}
                   className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors"
                 >
-                   Sil
+                  Sil
                 </button>
               </div>
             </div>
@@ -770,7 +758,7 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-6 w-full max-w-md">
             <h3 className="text-xl font-bold text-white mb-4">Rol Ver</h3>
-            
+
             <div className="space-y-4">
               <p className="text-white/80">
                 <span className="font-semibold">@{selectedUser.username}</span> kullanıcısına rol vermek istiyor musunuz?
@@ -787,8 +775,8 @@ export default function AdminPanel({ theme }: AdminPanelProps) {
                     <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 text-purple-400" />
                       <span>
-                        {selectedRole 
-                          ? availableRoles.find(r => r.id === selectedRole)?.name 
+                        {selectedRole
+                          ? availableRoles.find(r => r.id === selectedRole)?.name
                           : "Rol seçin"}
                       </span>
                     </div>

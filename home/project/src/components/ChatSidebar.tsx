@@ -125,17 +125,16 @@ export default function ChatSidebar() {
   return (
     <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-xl p-6 flex flex-col h-[calc(100vh-8rem)]">
       <h2 className="text-xl font-bold text-white mb-4">Canlı Sohbet</h2>
-      
+
       {/* Messages */}
       <div className="flex-1 overflow-y-auto space-y-4 mb-4">
         {messages.map((message) => (
-          <div 
-            key={message.id} 
-            className={`p-3 rounded-lg ${
-              message.profiles.username === currentUser?.user_metadata?.username
+          <div
+            key={message.id}
+            className={`p-3 rounded-lg ${message.profiles.username === currentUser?.user_metadata?.username
                 ? 'bg-purple-500/20 ml-8'
                 : 'bg-black/20 mr-8'
-            }`}
+              }`}
           >
             <p className="text-white/90 break-words">{message.content}</p>
             <div className="flex justify-between items-center mt-1 text-xs text-white/60">
